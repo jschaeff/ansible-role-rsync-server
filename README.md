@@ -64,10 +64,10 @@ rsync_server_user:
 
 # Main configuration
 rsync_server_config_main:
-  global: |
-    uid = rsync
-    gid = rsync
-  modules: []
+  global: 
+    - uid: rsync
+    - gid: rsync
+  modules: {}
 
 # Default daemon configuration
 rsync_server_config_default: |
@@ -105,16 +105,50 @@ _rsync_server_service:
 
 Follow this example:
 ``` yaml
-rsync_server_config:
-  global: |
+rsync_server_config_main:
+  global:
     uid: 'rsync'
     gid: 'rsync'
   modules:
-    - name: 'my_sync'
-      config: |
-        path = /data
-        comment = Example sync
-        read only = false
+    my_sync:
+      path: /data
+      comment: Example sync
+      read only: false
+```
+### Merge on group variables
+
+For instance in file group_vars/mygroup.yml :
+
+```yaml
+rsync_server_config_group:
+  global:
+    uid: '0'
+    gid: '0'
+  modules:
+    my_sync:
+      path: /data2
+      comment: Specific to this group of hosts
+      read only: false
+    my_other_sync:
+      path: /data3
+```
+
+### Merge by host
+
+This role is able to merge the 3 levels : all hosts, group of hosts, and a specific host.
+
+```yaml
+rsync_server_config_host:
+  global:
+    uid: '50'
+    gid: '50'
+  modules:
+    my_sync:
+      path: /data2
+      comment: Specific to this very host
+      read only: false
+    my_other_sync:
+      path: /data3
 ```
 
 ### Manage users used to authorization

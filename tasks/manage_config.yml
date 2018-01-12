@@ -32,7 +32,17 @@
     group: "{{ rsync_server_paths.files.default.group | default('root') }}"
     mode: "{{ rsync_server_paths.files.default.mode | default('0440') }}"
   notify: 'HANDLER | Restart Rsync'
+  when: ansible_os_family == 'debian'
 
+
+- name: 'CONFIG | Ensure config subfolder exists'
+  file:
+    dest: "/etc/rsyncd.d/localmodules/"
+    owner: "{{ rsync_server_paths.dirs.log.owner | default('root') }}"
+    group: "{{ rsync_server_paths.dirs.log.group | default('root') }}"
+    mode: "{{ rsync_server_paths.dirs.log.mode | default('0750') }}"
+    state: 'directory'
+  notify: 'HANDLER | Restart Rsync'
 
 - name: 'CONFIG | Ensure log folder exists'
   file:

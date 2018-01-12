@@ -1,8 +1,14 @@
 # {{ ansible_managed }}
 
-{{ rsync_server_config_main.global }}
-
-{% for item in rsync_server_config_main.modules %}
-[{{ item.name }}]
-{{ item.config }}
+{% for key,value in (rsync_server_config_main.global|combine(rsync_server_config_group.global)|combine(rsync_server_config_host.global)).iteritems() %}
+{{key}} = {{value}}
 {% endfor %}
+
+{% for module,config in (rsync_server_config_main.modules|combine(rsync_server_config_group.modules, recursive=True)|combine(rsync_server_config_host.modules, recursive=True)).iteritems() %}
+[{{ module }}]
+{% for k,v in config.iteritems()%}
+{{ k }} = {{ v }}
+{% endfor %}
+{% endfor %}
+
+&include /etc/rsyncd.d/localmodules

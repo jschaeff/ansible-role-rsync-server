@@ -1,0 +1,9 @@
+---
+
+# Specific install tasks for RedHat family
+
+- name: 'INSTALL | YUM | Install packages'
+  yum:
+    name: "{{ item.name }}"
+  notify: 'HANDLER | Restart Rsync'
+  with_items: "{{ rsync_server_packages }}"
