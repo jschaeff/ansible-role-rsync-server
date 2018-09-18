@@ -21,4 +21,4 @@ _rsync_server_paths:
 
 # Service management
 _rsync_server_service:
-  name: 'rsync'
+  name: 'rsyncd'
