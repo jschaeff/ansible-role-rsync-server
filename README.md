@@ -151,6 +151,10 @@ rsync_server_config_host:
       path: /data3
 ```
 
+### Local rsync modules
+
+It is possible to define directly on the host other rsync modules. Just put them in /etc/rsyncd.d/localmodules/
+
 ### Manage users used to authorization
 
 ``` yaml
